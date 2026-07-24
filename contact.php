@@ -1,0 +1,109 @@
+<?php require_once 'session.php'; redirectIfNotLoggedIn(); ?>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا - <?= SITE_NAME ?></title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loader"><div class="loader-spinner"></div><div class="loader-text">جاري التحميل...</div></div>
+    </div>
+
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <img src="<?= SITE_LOGO ?>" alt="<?= SITE_NAME ?>" style="height:40px;">
+                <span class="logo-text"><?= SITE_NAME ?></span>
+            </div>
+            <nav class="navbar">
+                <ul class="nav-list">
+                    <li><a href="home.php">الرئيسية</a></li>
+                    <li><a href="products.php">المنتجات</a></li>
+                    <li><a href="about.php">من نحن</a></li>
+                    <li><a href="contact.php" class="active">تواصل معنا</a></li>
+                    <li><a href="logout.php" class="logout-link"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+                </ul>
+                <div class="hamburger" id="hamburger">
+                    <span></span><span></span><span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="contact-page">
+        <div class="container">
+            <h1 class="page-title" style="font-size: 2.5rem; text-align: center; margin-bottom: 40px;">تواصل معنا</h1>
+            
+            <?php if (isset($_SESSION['contact_success'])): ?>
+                <div class="alert alert-success"><?= htmlspecialchars($_SESSION['contact_success']); unset($_SESSION['contact_success']); ?></div>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['contact_errors'])): ?>
+                <div class="alert alert-danger">
+                    <?php foreach ($_SESSION['contact_errors'] as $e) echo "<p>$e</p>"; unset($_SESSION['contact_errors']); ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="contact-grid">
+                <div class="contact-form-wrapper">
+                    <form action="contact_process.php" method="POST">
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> الاسم الكامل</label>
+                            <input type="text" name="fullname" placeholder="أحمد محمد" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                            <input type="email" name="email" placeholder="example@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-phone"></i> الهاتف</label>
+                            <input type="tel" name="phone" placeholder="<?= SITE_PHONE ?>">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-tag"></i> عنوان الرسالة</label>
+                            <input type="text" name="subject" placeholder="موضوع الرسالة">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-comment"></i> الرسالة</label>
+                            <textarea name="message" rows="5" placeholder="اكتب رسالتك هنا..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">إرسال <i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+                <div class="contact-info">
+                    <h3>معلومات الاتصال</h3>
+                    <p><i class="fas fa-phone"></i> <?= SITE_PHONE ?></p>
+                    <p><i class="fas fa-envelope"></i> <?= SITE_EMAIL ?></p>
+                    <p><i class="fas fa-map-marker-alt"></i> <?= SITE_ADDRESS ?></p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d107048.55435357872!2d33.405!3d14.400!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1686f4c3f3e3e3e3%3A0x3e3e3e3e3e3e3e3e!2z2KfZhNiq2KzYp9mG!5e0!3m2!1sar!2ssd!4v1645789567890" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-col"><h4><?= SITE_NAME ?></h4><p>متجر زيوت وقطع غيار السيارات</p></div>
+            <div class="footer-col"><h4>روابط</h4><ul><li><a href="home.php">الرئيسية</a></li><li><a href="products.php">المنتجات</a></li><li><a href="about.php">من نحن</a></li><li><a href="contact.php">تواصل معنا</a></li></ul></div>
+            <div class="footer-col"><h4>تواصل</h4><p><i class="fas fa-phone"></i> <?= SITE_PHONE ?></p><p><i class="fas fa-envelope"></i> <?= SITE_EMAIL ?></p><p><i class="fas fa-map-marker-alt"></i> <?= SITE_ADDRESS ?></p></div>
+        </div>
+        <div class="footer-bottom"><p>&copy; <?= date('Y') ?> <?= SITE_NAME ?>. جميع الحقوق محفوظة</p></div>
+    </footer>
+
+    <button id="back-to-top"><i class="fas fa-chevron-up"></i></button>
+    <script src="script.js"></script>
+</body>
+</html>

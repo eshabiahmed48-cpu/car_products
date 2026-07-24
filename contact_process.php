@@ -1,0 +1,35 @@
+<?php
+// contact_process.php - معالجة نموذج التواصل
+require_once 'config.php';
+require_once 'session.php';
+redirectIfNotLoggedIn();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $fullname = trim($_POST['fullname'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $phone = trim($_POST['phone'] ?? '');
+    $subject = trim($_POST['subject'] ?? '');
+    $message = trim($_POST['message'] ?? '');
+    $errors = [];
+
+    if (empty($fullname)) $errors[] = 'الاسم مطلوب';
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'بريد غير صحيح';
+    if (empty($message)) $errors[] = 'الرسالة مطلوبة';
+
+    if (!empty($errors)) {
+        $_SESSION['contact_errors'] = $errors;
+        header('Location: contact.php');
+        exit;
+    }
+
+    $stmt = $pdo->prepare("INSERT INTO contact_messages (fullname, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$fullname, $email, $phone, $subject, $message]);
+
+    $_SESSION['contact_success'] = 'تم إرسال رسالتك بنجاح، سيتواصل معك فريقنا قريباً';
+    header('Location: contact.php');
+    exit;
+} else {
+    header('Location: contact.php');
+    exit;
+}
+?>

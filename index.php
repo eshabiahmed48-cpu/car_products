@@ -1,0 +1,135 @@
+<?php require_once 'session.php'; redirectIfLoggedIn(); ?>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - <?= SITE_NAME ?></title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loader"><div class="loader-spinner"></div><div class="loader-text">جاري التحميل...</div></div>
+    </div>
+
+    <div class="login-page">
+        <div class="login-container">
+            <div class="login-form-wrapper">
+                <div class="login-brand">
+                    <div class="login-logo">
+                        <img src="<?= SITE_LOGO ?>" alt="<?= SITE_NAME ?>" style="height:70px;">
+                    </div>
+                    <h1 class="login-company-name"><?= SITE_NAME ?></h1>
+                    <p class="login-company-sub">متجر زيوت وقطع غيار السيارات</p>
+                </div>
+
+                <?php if (isset($_SESSION['login_error'])): ?>
+                    <div class="alert alert-danger"><?= htmlspecialchars($_SESSION['login_error']); unset($_SESSION['login_error']); ?></div>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['register_errors'])): ?>
+                    <div class="alert alert-danger">
+                        <?php foreach ($_SESSION['register_errors'] as $e) echo "<p>$e</p>"; unset($_SESSION['register_errors']); ?>
+                    </div>
+                <?php endif; ?>
+
+                <form id="login-form" action="login.php" method="POST">
+                    <h2 class="login-title">مرحباً بعودتك</h2>
+                    <p class="login-subtitle">سجل الدخول إلى حسابك</p>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                        <input type="email" name="email" placeholder="example@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> كلمة المرور</label>
+                        <div class="password-wrapper">
+                            <input type="password" name="password" placeholder="********" required>
+                            <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox-label"><input type="checkbox" name="remember"><span class="checkmark"></span>تذكرني</label>
+                        <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
+                    </div>
+                    <button type="submit" class="login-btn"><span>تسجيل الدخول</span><i class="fas fa-arrow-left"></i></button>
+                    <p class="register-link">ليس لديك حساب؟ <a href="#" id="show-register">إنشاء حساب جديد</a></p>
+                </form>
+
+                <form id="register-form" action="register.php" method="POST" style="display:none;">
+                    <h2 class="login-title">إنشاء حساب</h2>
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> الاسم الكامل</label>
+                        <input type="text" name="fullname" placeholder="أحمد محمد" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                        <input type="email" name="email" placeholder="example@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> رقم الهاتف (اختياري)</label>
+                        <input type="tel" name="phone" placeholder="+249 12 345 6789">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> كلمة المرور</label>
+                        <div class="password-wrapper">
+                            <input type="password" name="password" placeholder="********" required>
+                            <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-check-circle"></i> تأكيد كلمة المرور</label>
+                        <div class="password-wrapper">
+                            <input type="password" name="confirm_password" placeholder="********" required>
+                            <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <button type="submit" class="login-btn"><span>إنشاء حساب</span><i class="fas fa-user-plus"></i></button>
+                    <p class="register-link">لديك حساب؟ <a href="#" id="show-login">تسجيل الدخول</a></p>
+                </form>
+            </div>
+            <div class="login-image-wrapper">
+                <div class="login-image-content">
+                    <div class="login-image-overlay">
+                        <img src="<?= SITE_LOGO ?>" alt="<?= SITE_NAME ?>" style="height:80px; margin-bottom:15px;">
+                        <h2><?= SITE_NAME ?></h2>
+                        <p>أفضل مكان لشراء زيوت وقطع غيار السيارات في السودان</p>
+                        <div class="login-features">
+                            <span><i class="fas fa-check-circle"></i> منتجات أصلية</span>
+                            <span><i class="fas fa-check-circle"></i> ضمان شامل</span>
+                            <span><i class="fas fa-check-circle"></i> شحن سريع إلى ود مدني</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('show-register').onclick = function(e) {
+            e.preventDefault();
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        };
+        document.getElementById('show-login').onclick = function(e) {
+            e.preventDefault();
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+        };
+        document.querySelectorAll('.toggle-password').forEach(btn => {
+            btn.onclick = function() {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('i');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'fas fa-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'fas fa-eye';
+                }
+            };
+        });
+    </script>
+</body>
+</html>
